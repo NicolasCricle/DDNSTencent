@@ -101,7 +101,6 @@ class RecordListApi(TencentApi):
     def handle_init_params(self, **kwargs):
         data = {
             "Action": "RecordList",
-            "domain": cfgParse.get("tencent", "domain")
         }
         kwargs.update(data)
         return kwargs
@@ -122,46 +121,13 @@ class RecordModify(TencentApi):
 
     def handle_init_params(self, **kwargs):
 
-        recordId = cfgParse.get("tencent", "record_id")
-        domain = cfgParse.get("tencent", "domain")
-        subDomain = cfgParse.get("tencent", "sub_domain")
-        recordType = cfgParse.get("tencent", "record_type")
-        recordLine = cfgParse.get("tencent", "record_line")
-
-        value = kwargs.pop("newIp")
-
-        # 从来没有获取过
-        if not recordId:
-            data = RecordListApi().run()
-            if not data:
-                raise TencentException("can not get record list")
-
-            records = data.get("records", dict())
-
-            curRecord = dict()
-            for record in records:
-                if record.get("name") == subDomain:
-                    curRecord = record
-                    break
-            else:
-                raise TencentException("can not find suit sub domain")
-
-            recordId = str(curRecord.get("id"))
-            recordLine = curRecord.get("line")
-            recordType = curRecord.get("type")
-
-            cfgParse.set("tencent", "record_id", recordId)
-            cfgParse.set("tencent", "record_line", recordLine)
-            cfgParse.set("tencent", "record_type", recordType)
-            cfgParse.set("route", "ip", value)
-
         data = {
-            "recordId": recordId,
-            "domain": domain,
-            "subDomain": subDomain,
-            "recordType": recordType,
-            "recordLine": recordLine,
-            "value": value,
+            "recordId": kwargs.pop("recordId"),
+            "domain": kwargs.pop("domain"),
+            "subDomain": kwargs.pop("subDomain"),
+            "recordType": kwargs.pop("recordType"),
+            "recordLine": kwargs.pop("recordLine"),
+            "value": kwargs.pop("value"),
             "Action": "RecordModify"
         }
 

@@ -17,6 +17,7 @@ class Parser:
             self.p.write(f)
 
 
+# 使用crontab 脚本的时候 将这个路径改为绝对路径
 cfgParse = Parser(".ddns.ini")
 
 if __name__ == "__main__":
