@@ -28,8 +28,8 @@ def main():
                 continue
 
             RecordModify(
-                recordId=record.get("id"),
-                domain=domain,
+                recordId=str(record.get("id")),
+                domain=domain.get("name"),
                 subDomain=record.get("name"),
                 recordLine=record.get("line"),
                 recordType=record.get("type"),
